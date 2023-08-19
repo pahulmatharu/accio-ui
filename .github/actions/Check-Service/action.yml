@@ -1,0 +1,15 @@
+name: Check Service
+description: 'Check if a ECS service is spun down'
+inputs:
+  service_name:
+    required: true
+runs:
+    using: "composite"
+    steps:
+      - name: Wait 10 seconds
+        run: sleep 10
+        shell: bash
+      - name: Check if service is spun down
+        run: |
+          echo "spunDown=$(aws ecs describe-services --cluster ${{ env.ecs_cluster_name }} --services ${{ inputs.service_name }} | grep -q '\"runningCount\": 0' && echo 'true')" >> $GITHUB_ENV
+        shell: bash

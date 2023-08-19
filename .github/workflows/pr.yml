@@ -1,0 +1,28 @@
+name: Build
+on:
+  pull_request:
+    branches:
+      - main
+jobs:
+  test-and-build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Setup Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+        registry-url: 'https://npm.pkg.github.com'
+        scope: '@bitbot'
+    - name: Update NPMRC with auth token for Github registry
+      run: echo "//npm.pkg.github.com:_authToken=${{ secrets.CICD_GITHUB_PAT_READPACKAGES }}" >> ./.npmrc
+      working-directory: ./
+    - name: Install Packages
+      run: npm install
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.CICD_GITHUB_PAT_READPACKAGES }}
+    - name: Build
+      run: npm run build
+    - name: Run Tests
+      run: npm test -- --coverage

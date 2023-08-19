@@ -1,0 +1,13 @@
+name: Set Service Desired Count
+description: 'Set a ECS service desired count'
+inputs:
+  desired_count:
+    required: true
+  service_name:
+    required: true
+runs:
+    using: "composite"
+    steps:
+      - name: Set desired count to ${{ inputs.desired_count }}
+        run: aws ecs update-service --cluster ${{ env.ecs_cluster_name }} --service ${{ inputs.service_name }} --desired-count ${{ inputs.desired_count }}
+        shell: bash

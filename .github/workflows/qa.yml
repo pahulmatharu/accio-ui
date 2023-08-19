@@ -1,0 +1,96 @@
+name: QA_RELEASE
+on:
+  push:
+    branches:
+      - main
+jobs:
+  test-and-build:
+    runs-on: ubuntu-latest
+    env:
+      ecs_cluster_name: accio-ui
+      ecs_service_name: bitbot-accio-ui
+      ecr_repository: bitbot/accio-ui
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+          registry-url: 'https://npm.pkg.github.com'
+          scope: '@bitbot'
+      - name: Update NPMRC with auth token for Github registry
+        run: echo "//npm.pkg.github.com:_authToken=${{ secrets.CICD_GITHUB_PAT_READPACKAGES }}" >> ./.npmrc
+        working-directory: ./
+      - name: Install Packages
+        run: npm install
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.CICD_GITHUB_PAT_READPACKAGES }}
+      - name: Build
+        run: npm run build:qa
+      - name: Run Tests
+        run: npm test
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+      - name: Build, tag, and push image to Amazon ECR
+        id: build-image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: ${{ env.ecr_repository }}
+          GITHUB_TAG: ${{ github.sha }}
+          IMAGE_TAG: latest
+        run: |
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -t githubsha:$GITHUB_TAG  .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+      - name: Set service desired count to 0
+        uses: ./.github/actions/Set-Service-Desired-Count
+        with:
+          desired_count: 0
+          service_name: ${{ env.ecs_service_name }}
+      - name: Check if Service is spun down 1
+        uses: ./.github/actions/Check-Service
+        with:
+          service_name: ${{ env.ecs_service_name }}
+      - name: Check if Service is spun down 2
+        if: env.spunDown != 'true'
+        uses: ./.github/actions/Check-Service
+        with:
+          service_name: ${{ env.ecs_service_name }}
+      - name: Check if Service is spun down 3
+        if: env.spunDown != 'true'
+        uses: ./.github/actions/Check-Service
+        with:
+          service_name: ${{ env.ecs_service_name }}
+      - name: Check if Service is spun down 4
+        if: env.spunDown != 'true'
+        uses: ./.github/actions/Check-Service
+        with:
+          service_name: ${{ env.ecs_service_name }}
+      - name: Check if Service is spun down 5
+        if: env.spunDown != 'true'
+        uses: ./.github/actions/Check-Service
+        with:
+          service_name: ${{ env.ecs_service_name }}
+      - name: Check if Service is spun down 6
+        if: env.spunDown != 'true'
+        uses: ./.github/actions/Check-Service
+        with:
+          service_name: ${{ env.ecs_service_name }}
+      - name: Fail if still not spun down on 6th attempt
+        if: env.spunDown != 'true'
+        run: exit 1
+        shell: bash
+      - name: Set service desired count to 1
+        if: env.spunDown == 'true'
+        uses: ./.github/actions/Set-Service-Desired-Count
+        with:
+          desired_count: 1
+          service_name: ${{ env.ecs_service_name }}
