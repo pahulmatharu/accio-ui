@@ -1,0 +1,10 @@
+.root {
+  height: 80px;
+  width: 100%;
+  padding: 12px 10px;
+  box-sizing: border-box;
+}
+
+.img {
+  height: 85%;
+}
