@@ -5,11 +5,13 @@ import './index.css';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import getStore from 'store/configureStore';
+import { configureClients } from 'api/setup/setup';
 // import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement,
 );
+configureClients();
 const store = getStore();
 
 root.render(

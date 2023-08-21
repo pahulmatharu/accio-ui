@@ -56,9 +56,6 @@ export default class HttpClient implements IHttpClient {
       const conf: AxiosRequestConfig<TRequest> = {
         headers,
       };
-      if (useArrayBuffer) {
-        conf['responseType'] = 'arraybuffer';
-      }
       const response = await this.client.post<TResponse>(path, payload, conf);
       return this.handleResponse<TResponse>(response);
     } catch (error) {

@@ -1,23 +1,13 @@
-import axios from 'axios';
 import HttpClient from './base-client';
+import KitsService from 'api/kits-service';
 
-
+let kitService: KitsService;
 export const configureClients = () => {
-  // const omniClient = new HttpClient(config.omniocularsBaseUrl);
-  // const subjectReconciliationClient = new HttpClient(
-  //   config.subjectReconciliationBaseUrl,
-  // );
-
-  // alarmService = new AlarmsService(omniClient);
+  // this should
+  const client = new HttpClient(
+    process.env.REACT_APP_PROXY_BASE_URL || 'http://localhost:5000',
+  );
+  kitService = new KitsService(client);
 };
 
-// export const GetKitsService = () => kitsService;
-
-export const getUser = async (baseUrl: string) => {
-  try {
-    const res = await axios.get(`${baseUrl}/users`, { withCredentials: true });
-    return res.data;
-  } catch {
-    return undefined;
-  }
-};
+export const GetKitsService = () => kitService;
