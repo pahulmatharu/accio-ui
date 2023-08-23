@@ -3,7 +3,7 @@ import { FilterType } from 'models/filter-type';
 import { Kit } from 'models/kit';
 
 export default class KitsService {
-  controller: string = 'kits';
+  controller: string = 'kit';
   httpClient: HttpClient;
   constructor(httpClient: HttpClient) {
     this.httpClient = httpClient;
