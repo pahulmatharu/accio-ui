@@ -20,7 +20,7 @@ const coreSlice = createSlice({
     setKits(state: ICoreState, action: IActionPayload<Kit[]>) {
       state.kits = action.payload;
     },
-    setSelectedKit(state: ICoreState, action: IActionPayload<Kit>) {
+    setSelectedKit(state: ICoreState, action: IActionPayload<Kit | undefined>) {
       state.selectedKit = action.payload;
     },
   },

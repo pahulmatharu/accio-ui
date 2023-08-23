@@ -1,48 +1,22 @@
-# Getting Started with Create React App
+// Add search engine or to elastic search instead of DB queries
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Setup:
 
-## Available Scripts
+1. npm install
+2. Install nodeJS backend, and run
+3. Npm run start
 
-In the project directory, you can run:
+Improvements:
 
-### `npm start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-// Add search engine or to elastic search
+1. Better UX by far
+2. Add performance improvements
+   a. Split components out better so only the necessary parts of the tree are updating
+   b. debounce is currently causing a rerender, can be fixed
+   c. Consider global state, but in this usecase might cause more harm
+3. Add Authentication (example usecase: If there is more information on the Kit and any data is sensitive, we could ask them to login after finding their kit)
+4. Add Logging
+5. Add Ids to all buttons and items that will be integration testing
+6. Add Unit tests
+7. Add themeing (could use styled components but that is slwoer than css modules, sass, etc);
+8. Make this search embeddable maybe? Maybe to make it easier for customers allow them to embedde this as a snippet (Not iframe); If this was something that we did, you would then also want to split the data by tenant so faster query time.
+9. Need to handle Ddos potential, and how to limit & block ips

@@ -1,0 +1,27 @@
+.root {
+  background: #242526;
+  border-radius: 16px;
+  height: 94%;
+  width: 80%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
+  flex-direction: column;
+  color: #fff;
+  font-size: 25px;
+  font-weight: 700;
+}
+
+.img {
+  height: 67%;
+}
+
+.close {
+  position: absolute;
+  right: 15px;
+  font-size: 36px;
+  cursor: pointer;
+  top: 15px;
+}
